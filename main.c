@@ -6,6 +6,7 @@ int main(){
     char user_input;
 
     do{
+        setbuf(stdin,NULL);
         printf("Enter one option: "); // TODO MAKE THIS NICE (TABELINHA DO GABRIEL)
         scanf("%c", &user_input);
 
@@ -16,11 +17,11 @@ int main(){
             break;
             
         case 'r': // READ
-            /* code */
+            read();
             break;
         
         case 'u': // UPDATE
-            /* code */
+            update();
             break;
         
         case 'd': // DELETE
@@ -31,7 +32,7 @@ int main(){
             break;
         
         default:
-            printf("Option invalid!");
+            printf("Option invalid!\n");
             break;
         }
 

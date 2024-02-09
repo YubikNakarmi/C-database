@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct steam{
     char name[50];
@@ -11,7 +12,7 @@ struct steam{
     int year;
     int metacritic; 
     char studio[50];
-};  
+};
 
 typedef struct steam games;
 
@@ -29,7 +30,7 @@ int get_id (){
     arch = load_db("r"); // TODO ERROR HANDELING
 
     if (arch == NULL)
-        arch = load_db("a+");
+        arch = load_db("a");
 
     int c = fgetc(arch);
     
@@ -65,7 +66,10 @@ void create(){
     printf("Enter the name of the game: ");
     scanf("%49s", game.name);
     setbuf(stdin, NULL);
-    
+
+    for(int i = 0; i < strlen(game.name); i++)
+        game.name[i] = (game.name[i] == ' ') ? '_' : game.name[i];
+
     printf("Enter the name of the platform: ");
     scanf("%49s", game.platform);
     setbuf(stdin, NULL);
@@ -98,43 +102,124 @@ void create(){
     fgets(game.studio, 50, stdin);
     setbuf(stdin, NULL);
     
-    fprintf(arch,"%d | %s | %s | %f | %d | %f | %d | %d | %s",get_id(),game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+    fprintf(arch,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s",get_id(),game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
 
     fclose(arch);
-    
 }
 
 
-// void read(int option){
-//     games game;
-//     FILE * arch;
+void read(){
+    games game;
+    FILE * arch;
 
-//     arch = load_db("r");
+    int option, id;
 
-//     if(option == -1){
+    arch = load_db("r");
 
-//         while(1){
+    printf("Enter -1 to list all OR an especific ID: ");
+    scanf("%d", &option);
 
-//             fscanf(arch,"%s",line);
+    if(option == -1){
+        
+        while(1){
+            
+            if(feof(arch)){
+                printf("final do arquivo.\n");
+                break;
+            }
 
-//             if(feof(arch))
-//                 break;
+            fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
 
-//             printf("%s\n",line);
-//     }
-//     }
+            printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %f | YEAR: %d | METASCORE: %d | STUDIO: %s \n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+        }
+    }else{
+        while(1){
 
-//     fclose(arch);
-// }
+            fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
 
-// void update(){
-//     games game;
-//     FILE * arch;
+            if(feof(arch)){
+                printf("The system couldn't find the ID you provided.\n");
+                break;
+            }
 
-//     arch = load_db("");
+            if(id == option){
+                printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %.2f | YEAR: %d | METASCORE: %d | STUDIO: %s \n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+                break;
+            }
+        }
 
-//     fclose(arch);
-// }
+    fclose(arch);
+    }
+}
+
+void update(){
+    games game;
+    FILE * arch;
+
+    int option, id;
+
+    printf("Enter -1 to list all OR an especific ID: ");
+    scanf("%d", &option);
+
+    arch = load_db("a+"); // TODO ERROR HANDELING
+    rewind(arch);
+
+    while(1){
+
+        if(feof(arch)){
+            printf("The system couldn't find the ID you provided.\n");
+            break;
+        }
+
+        fscanf(arch,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
+ 
+        if(id == option){
+            
+            printf("Enter the name of the game: ");
+            scanf("%49s", game.name);
+            setbuf(stdin, NULL);
+
+            for(int i = 0; i < strlen(game.name); i++)
+                game.name[i] = (game.name[i] == ' ') ? '_' : game.name[i];
+
+            printf("Enter the name of the platform: ");
+            scanf("%49s", game.platform);
+            setbuf(stdin, NULL);
+
+            printf("Enter the genre of the game: ");
+            scanf("%49s", game.genre);
+            setbuf(stdin, NULL);
+
+            printf("Enter the price of the game: ");
+            scanf("%f", &game.price);
+            setbuf(stdin, NULL);
+
+            printf("Enter the quantity of the game keys: ");
+            scanf("%d", &game.keys);
+            setbuf(stdin, NULL);
+
+            printf("Enter public rating of the game: ");
+            scanf("%f", &game.public_rating);
+            setbuf(stdin, NULL);
+
+            printf("Enter the year the game was released: ");
+            scanf("%d", &game.year);
+            setbuf(stdin, NULL);
+
+            printf("Enter the game metascore: ");
+            scanf("%d", &game.metacritic);
+            setbuf(stdin, NULL);
+
+            printf("Enter the game studio: ");
+            fgets(game.studio, 50, stdin);
+            setbuf(stdin, NULL);
+            
+            fprintf(arch,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s",id ,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+        }
+
+    fclose(arch);
+    }
+}
 
 
 // void remove(){
@@ -145,4 +230,3 @@ void create(){
 
 //     fclose(arch);
 // }
-
