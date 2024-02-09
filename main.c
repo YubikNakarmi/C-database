@@ -28,6 +28,7 @@ int main(){
             
         case 'l': // LEAVE 
             return 0;
+            break;
         
         default:
             printf("Option invalid!");
@@ -35,9 +36,6 @@ int main(){
         }
 
     } while (user_input != 'l');
-    
-
-        
     
     return 0;
 }

@@ -64,9 +64,11 @@ void create(){
 
     printf("Enter the name of the game: ");
     scanf("%49s", game.name);
+    setbuf(stdin, NULL);
     
     printf("Enter the name of the platform: ");
     scanf("%49s", game.platform);
+    setbuf(stdin, NULL);
 
     printf("Enter the genre of the game: ");
     scanf("%49s", game.genre);
