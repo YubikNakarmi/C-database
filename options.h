@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "db_functions.h"
+#include "menu.h"
 
 struct steam{
     char name[50];
@@ -17,45 +18,12 @@ struct steam{
 
 typedef struct steam games;
 
-int get_id (){
-    FILE * arch;
-
-    arch = load_db("r"); // TODO ERROR HANDELING
-
-    if (arch == NULL)
-        arch = load_db("a");
-
-    int c = fgetc(arch);
-    
-    if (c == EOF) {
-        return 0; // If the file is empty, it means that there are no games registered. 
-    } else {
-        ungetc(c, arch);
-    }
-
-    char line[255];
-    int last_id;
-    
-    while(1){
-
-        if (feof(arch)){
-            break;
-        }
-
-        fgets(line,255,arch);
-        
-        last_id = atoi(&line[0]);
-    }
-
-    return last_id + 1;
-}
-
-void create(){
-    system("cls");
+int create(){
+    display_creating_game();
     games game;
     FILE * arch;
 
-    arch = load_db("a");
+    arch = load_db("steamDB.txt","a");
 
     setbuf(stdin, NULL);
     printf("Enter the name of the game: ");
@@ -96,46 +64,50 @@ void create(){
     printf("Enter the game studio: ");
     fgets(game.studio,50,stdin);
     fix_formatting(game.studio);
-    
+
     if(get_id() == 0)
         fprintf(arch,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",get_id(),game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
     else
         fprintf(arch,"\n%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",get_id(),game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
 
     fclose(arch);
+    return 0;
 }
 
 
-void read(){
-    system("cls");
+int read(){
+    clear_terminal();
     games game;
     FILE * arch;
 
     int option, id;
 
-    arch = load_db("r");
+    arch = load_db("steamDB.txt","r");
+
+    if(arch == NULL){
+        printf("The file \"steamDB.txt does not exist\"");
+        return 1;
+    }
 
     printf("Enter -1 to list all OR an especific ID: ");
     scanf("%d", &option);
 
     if(option == -1){
-        
-        while(!feof(arch)){
 
-            if(feof(arch)){
-                printf("final do arquivo.\n");
+        display_listing_all_games();
+
+        while(1){
+
+            if(feof(arch))
                 break;
-            }
-                        else{
-                fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
 
-                printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %.2f | YEAR: %d | METASCORE: %d | STUDIO: %s \n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+            fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s ",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
+            printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %.2f | YEAR: %d | METASCORE: %d | STUDIO: %s \n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
         
-            }
-            
         }
         
-    }else{
+    }
+    else{
         while(1){
 
             if(feof(arch)){
@@ -143,98 +115,176 @@ void read(){
                 break;
             }
 
-            fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
+            fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s ",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
 
             if(id == option){
+                display_specific_game(option);
                 printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %.2f | YEAR: %d | METASCORE: %d | STUDIO: %s \n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
                 break;
             }
         }
-
-    fclose(arch);
+        
     }
+    fclose(arch);
+    
+    return 0;
 }
 
-void update(){
-    system("cls");
+int update(){
+    clear_terminal();
     games game;
     FILE * arch;
+    FILE * temp;
+    
+    int option, id, a, found_id = 0;
 
-    int option, id;
+    arch = load_db("steamDB.txt","r");
+    temp = load_db("temp____steamDB.txt","w");
 
-    printf("Enter the especific ID that you want to modif: ");
+    if(arch == NULL){
+        printf("The file \"steamDB.txt\" does not exist!");
+        return 1;
+    }
+
+    printf("Enter the especific ID that you want to modify: ");
     scanf("%d", &option);
+    setbuf(stdin, NULL);
+    fflush(stdin);
 
-    arch = load_db("r+"); // TODO ERROR HANDELING
+    display_update(option);
 
-    while(1){
-
-        if(feof(arch)){
-            printf("The system couldn't find the ID you provided.\n");
-            break;
-        }
-
-        fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
- 
-        if(id == option){
-
-            printf("DEBUG!!!!\n");
-            
-            setbuf(stdin, NULL);
+    while (1){
+        fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s ",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
+        if(option == id){
+            found_id = 1;
             printf("Enter the name of the game: ");
             fgets(game.name,50,stdin);
             fix_formatting(game.name);
-
+            
             setbuf(stdin, NULL);
             printf("Enter the name of the platform: ");
             fgets(game.platform,50,stdin);
             fix_formatting(game.platform);
-
+            
             setbuf(stdin, NULL);
             printf("Enter the genre of the game: ");
             fgets(game.genre,50,stdin);
             fix_formatting(game.genre);
-
+            
             setbuf(stdin, NULL);
             printf("Enter the price of the game: ");
             scanf("%f", &game.price);
-
+            
             setbuf(stdin, NULL);
             printf("Enter the quantity of the game keys: ");
             scanf("%d", &game.keys);
-
+            
             setbuf(stdin, NULL);
             printf("Enter public rating of the game: ");
             scanf("%f", &game.public_rating);
-
+            
             setbuf(stdin, NULL);
             printf("Enter the year the game was released: ");
             scanf("%d", &game.year);
-
+            
             setbuf(stdin, NULL);
             printf("Enter the game metascore: ");
             scanf("%d", &game.metacritic);
-
             setbuf(stdin, NULL);
+            
             printf("Enter the game studio: ");
             fgets(game.studio,50,stdin);
             fix_formatting(game.studio);
-
-            // fprintf(arch,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
-            fputs("teste",arch);
-            break;
         }
-
+        if(id == 0)
+            fprintf(temp,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+        else
+            fprintf(temp,"\n%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+        if(feof(arch))
+            break;
     }
+
     fclose(arch);
+    fclose(temp);
+
+    arch = load_db("steamDB.txt","w");
+    temp = load_db("temp____steamDB.txt","r");
+
+    while( (a = fgetc(temp)) != EOF )
+        fputc(a, arch);
+    
+    fclose(arch);
+    fclose(temp);
+
+    if(found_id)
+        printf("\nTask concluded.");
+    
+    else
+        printf("\nThe system couldn't find the ID you provided.");
+
+    return 0;
 }
 
+int del(){
+    clear_terminal();
+    games game;
+    FILE * arch;
+    FILE * temp;
+    
+    int option, id, a;
 
-// void remove(){
-//     games game;
-//     FILE * arch;
+    arch = load_db("steamDB.txt","r");
+    temp = load_db("temp____steamDB.txt","w");
 
-//     arch = load_db("");
+    if(arch == NULL){
+        printf("The file \"steamDB.txt\" does not exist!");
+        return 1;
+    }
 
-//     fclose(arch);
-// }
+    printf("Enter the especific ID that you want to modify: ");
+    scanf("%d", &option);
+    setbuf(stdin, NULL);
+    fflush(stdin);
+
+    display_delete(option);
+
+    int found_id = 0;
+
+    while (1){
+        fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s ",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
+        
+        if(option == id){
+            game.keys = 0;
+            found_id = 1;
+        }
+            
+        if(id == 0)
+            fprintf(temp,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+        else
+            fprintf(temp,"\n%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+        
+        if(feof(arch)){
+            break;
+        }
+    }
+
+    fclose(arch);
+    fclose(temp);
+
+    arch = load_db("steamDB.txt","w");
+    temp = load_db("temp____steamDB.txt","r");
+
+    while( (a = fgetc(temp)) != EOF )
+        fputc(a, arch);
+    
+    fclose(arch);
+    fclose(temp);
+
+    if(found_id)
+        printf("\nTask concluded.");
+    
+    else
+        printf("\nThe system couldn't find the ID you provided.");
+    
+    return 0;
+}

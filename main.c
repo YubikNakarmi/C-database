@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "options.h"
-#include "menu.h"
 
 int main(){
     char user_input;
@@ -30,6 +29,7 @@ int main(){
             break;
         
         case 'd': // DELETE
+            del();
             break;
             
         case 'l': // LEAVE 
