@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "options.h"
 
 int main(){
@@ -10,6 +11,8 @@ int main(){
         
         printf("Enter one option: "); // TODO MAKE THIS NICE (TABELINHA DO GABRIEL)
         scanf("%c", &user_input);
+
+        user_input = tolower(user_input);
 
         switch (user_input)
         {

@@ -96,7 +96,10 @@ void create(){
     fgets(game.studio,50,stdin);
     fix_formatting(game.studio);
     
-    fprintf(arch,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s \n",get_id(),game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+    if(get_id() == 0)
+        fprintf(arch,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",get_id(),game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+    else
+        fprintf(arch,"\n%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",get_id(),game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
 
     fclose(arch);
 }
@@ -115,16 +118,19 @@ void read(){
 
     if(option == -1){
         
-        while(1){
+        while(!feof(arch)){
             
             if(feof(arch)){
                 printf("final do arquivo.\n");
                 break;
             }
+            else{
+                fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
 
-            fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
-
-            printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %.2f | YEAR: %d | METASCORE: %d | STUDIO: %s \n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+                printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %.2f | YEAR: %d | METASCORE: %d | STUDIO: %s \n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+        
+            }
+            
         }
 
     }else{
