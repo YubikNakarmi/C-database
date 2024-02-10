@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "options.h"
 #include "menu.h"
 
@@ -11,6 +12,8 @@ int main(){
 
         setbuf(stdin,NULL);
         scanf("%c", &user_input);
+
+        user_input = tolower(user_input);
 
         switch (user_input)
         {
