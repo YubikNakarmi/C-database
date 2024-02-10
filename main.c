@@ -37,11 +37,10 @@ int main(){
             break;
         
         default:
-            printf("\n\t\t\tOption invalid!\n");
             break;
         }
 
-        printf("\n\t\tPress Enter to Continue");
+        printf("\n\n\t\tPress Enter to Continue");
         setbuf(stdin,NULL);
         while( getchar() != '\n' );
 

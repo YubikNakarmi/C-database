@@ -27,17 +27,17 @@ int create(){
 
     setbuf(stdin, NULL);
     printf("Enter the name of the game: ");
-    fgets(game.name,50,stdin);
+    scanf("%49s",game.name);
     fix_formatting(game.name);
     
     setbuf(stdin, NULL);
     printf("Enter the name of the platform: ");
-    fgets(game.platform,50,stdin);
+    scanf("%49s",game.platform);
     fix_formatting(game.platform);
     
     setbuf(stdin, NULL);
     printf("Enter the genre of the game: ");
-    fgets(game.genre,50,stdin);
+    scanf("%49s",game.genre);
     fix_formatting(game.genre);
     
     setbuf(stdin, NULL);
@@ -62,7 +62,7 @@ int create(){
     setbuf(stdin, NULL);
     
     printf("Enter the game studio: ");
-    fgets(game.studio,50,stdin);
+    scanf("%49s",game.studio);
     fix_formatting(game.studio);
 
     if(get_id() == 0)
@@ -102,7 +102,7 @@ int read(){
                 break;
 
             fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s ",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
-            printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %.2f | YEAR: %d | METASCORE: %d | STUDIO: %s \n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+            printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %.2f | YEAR: %d | METASCORE: %d | STUDIO: %s \n\n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
         
         }
         

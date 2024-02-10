@@ -33,30 +33,30 @@ void display_menu(){
 
 void display_creating_game(){
     clear_terminal();
-    printf("+-------------+\n");
-    printf("|Creating game|\n");
-    printf("+-------------+\n\n");
+    printf("+---------------+\n");
+    printf("| Creating game |\n");
+    printf("+---------------+\n\n");
 }
 
 void display_listing_all_games(){
     clear_terminal();
-    printf("+-----------------+\n");
-    printf("|Listing all games |\n");
-    printf("+-----------------+\n\n");
+    printf("+-------------------+\n");
+    printf("| Listing all games |\n");
+    printf("+-------------------+\n\n");
 }
 
 void display_specific_game(int id){
     clear_terminal();
-    printf("+--------------------------------+\n");
-    printf("|Now displaying game with ID [%d] |\n",id);
-    printf("+--------------------------------+\n\n");
+    printf("+---------------------------------+\n");
+    printf("| Now displaying game with ID [%d] |\n",id);
+    printf("+---------------------------------+\n\n");
 }
 
 void display_update(int id){
     clear_terminal();
-    printf("+----------------------------------+\n");
-    printf("|Now updating the game with ID [%d] |\n",id);
-    printf("+----------------------------------+\n\n");
+    printf("+-----------------------------------+\n");
+    printf("| Now updating the game with ID [%d] |\n",id);
+    printf("+-----------------------------------+\n\n");
 }
 
 void display_delete(int id){

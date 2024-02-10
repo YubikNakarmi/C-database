@@ -20,8 +20,8 @@ void fix_formatting(char *string){
 int get_id (){
     FILE * arch;
 
-    arch = load_db("steamDB.txt","r"); // TODO ERROR HANDELING
-
+    arch = load_db("steamDB.txt","r");
+    
     if (arch == NULL)
         arch = load_db("steamDB.txt","a");
 
