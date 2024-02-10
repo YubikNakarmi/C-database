@@ -38,11 +38,11 @@ int get_id (){
     
     while(1){
 
-        fgets(line,255,arch);
-
         if (feof(arch)){
             break;
         }
+
+        fgets(line,255,arch);
         
         last_id = atoi(&line[0]);
     }
@@ -91,8 +91,8 @@ void create(){
     setbuf(stdin, NULL);
     printf("Enter the game metascore: ");
     scanf("%d", &game.metacritic);
-    
     setbuf(stdin, NULL);
+    
     printf("Enter the game studio: ");
     fgets(game.studio,50,stdin);
     fix_formatting(game.studio);
@@ -126,18 +126,18 @@ void read(){
             
             fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
 
-            printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %f | YEAR: %d | METASCORE: %d | STUDIO: %s \n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+            printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %.2f | YEAR: %d | METASCORE: %d | STUDIO: %s \n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
         }
         
     }else{
         while(1){
 
-            fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
-
             if(feof(arch)){
                 printf("The system couldn't find the ID you provided.\n");
                 break;
             }
+
+            fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
 
             if(id == option){
                 printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %.2f | YEAR: %d | METASCORE: %d | STUDIO: %s \n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
@@ -160,7 +160,6 @@ void update(){
     scanf("%d", &option);
 
     arch = load_db("r+"); // TODO ERROR HANDELING
-    // rewind(arch);
 
     while(1){
 
@@ -215,7 +214,7 @@ void update(){
             fgets(game.studio,50,stdin);
             fix_formatting(game.studio);
 
-            // fprintf(arch,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s \n",id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+            // fprintf(arch,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
             fputs("teste",arch);
             break;
         }
