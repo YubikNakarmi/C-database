@@ -1,21 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "options.h"
+#include "menu.h"
 
 int main(){
     char user_input;
 
     do{
+        display_menu();
+
         setbuf(stdin,NULL);
-        
-        printf("Enter one option: "); // TODO MAKE THIS NICE (TABELINHA DO GABRIEL)
         scanf("%c", &user_input);
 
         switch (user_input)
         {
         case 'c': // CREATE
             create();
-            break;
+            break;            
             
         case 'r': // READ
             read();
@@ -33,9 +34,13 @@ int main(){
             break;
         
         default:
-            printf("Option invalid!\n");
+            printf("\n\t\t\tOption invalid!\n");
             break;
         }
+
+        printf("\n\t\tPress Enter to Continue");
+        setbuf(stdin,NULL);
+        while( getchar() != '\n' );
 
     } while (user_input != 'l');
     

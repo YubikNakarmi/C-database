@@ -51,6 +51,7 @@ int get_id (){
 }
 
 void create(){
+    system("cls");
     games game;
     FILE * arch;
 
@@ -103,6 +104,7 @@ void create(){
 
 
 void read(){
+    system("cls");
     games game;
     FILE * arch;
 
@@ -116,17 +118,17 @@ void read(){
     if(option == -1){
         
         while(1){
-            
+
             if(feof(arch)){
                 printf("final do arquivo.\n");
                 break;
             }
-
+            
             fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
 
             printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %f | YEAR: %d | METASCORE: %d | STUDIO: %s \n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
         }
-
+        
     }else{
         while(1){
 
@@ -148,6 +150,7 @@ void read(){
 }
 
 void update(){
+    system("cls");
     games game;
     FILE * arch;
 
