@@ -16,23 +16,23 @@ int main(){
 
         switch (user_input)
         {
-        case 'c': // CREATE
+        case 'c':
             create();
-            break;            
+            break;        
             
-        case 'r': // READ
+        case 'r':
             read();
             break;
         
-        case 'u': // UPDATE
+        case 'u':
             update();
             break;
         
-        case 'd': // DELETE
+        case 'd':
             del();
             break;
             
-        case 'l': // LEAVE 
+        case 'l':
             return 0;
             break;
         

@@ -16,6 +16,14 @@ void display_menu(){
     FILE * arch;
     arch = fopen("logo.txt","r");
 
+    time_t rawtime;
+    struct tm * timeinfo;
+    time( &rawtime );
+    timeinfo = localtime( &rawtime );
+
+    printf("+-------------------------------------------------------------+\n");
+    printf("|                       %02d:%02d %02d/%02d/%d                      |\n", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_mday, timeinfo->tm_mon+1, timeinfo->tm_year+1900);
+
     char menu_line[255];
 
     while(1){
