@@ -222,6 +222,8 @@ int update(){
     else
         printf("\nThe system couldn't find the ID you provided.");
 
+    remove("temp____steamDB.txt");
+
     return 0;
 }
 
@@ -285,6 +287,8 @@ int del(){
     
     else
         printf("\nThe system couldn't find the ID you provided.");
+    
+    remove("temp____steamDB.txt");
     
     return 0;
 }
