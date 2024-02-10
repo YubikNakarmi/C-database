@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "db_functions.h"
 
 struct steam{
     char name[50];
@@ -15,14 +16,6 @@ struct steam{
 };
 
 typedef struct steam games;
-
-FILE * load_db(char *option){
-    FILE * arch;
-    
-    arch = fopen("steamDB.txt",option);
-
-    return arch;
-}
 
 int get_id (){
     FILE * arch;
@@ -63,46 +56,47 @@ void create(){
 
     arch = load_db("a");
 
+    setbuf(stdin, NULL);
     printf("Enter the name of the game: ");
-    scanf("%49s", game.name);
+    fgets(game.name,50,stdin);
+    fix_formatting(game.name);
+    
     setbuf(stdin, NULL);
-
-    for(int i = 0; i < strlen(game.name); i++)
-        game.name[i] = (game.name[i] == ' ') ? '_' : game.name[i];
-
     printf("Enter the name of the platform: ");
-    scanf("%49s", game.platform);
+    fgets(game.platform,50,stdin);
+    fix_formatting(game.platform);
+    
     setbuf(stdin, NULL);
-
     printf("Enter the genre of the game: ");
-    scanf("%49s", game.genre);
+    fgets(game.genre,50,stdin);
+    fix_formatting(game.genre);
+    
     setbuf(stdin, NULL);
-
     printf("Enter the price of the game: ");
     scanf("%f", &game.price);
+    
     setbuf(stdin, NULL);
-
     printf("Enter the quantity of the game keys: ");
     scanf("%d", &game.keys);
+    
     setbuf(stdin, NULL);
-
     printf("Enter public rating of the game: ");
     scanf("%f", &game.public_rating);
+    
     setbuf(stdin, NULL);
-
     printf("Enter the year the game was released: ");
     scanf("%d", &game.year);
+    
     setbuf(stdin, NULL);
-
     printf("Enter the game metascore: ");
     scanf("%d", &game.metacritic);
-    setbuf(stdin, NULL);
-
-    printf("Enter the game studio: ");
-    fgets(game.studio, 50, stdin);
-    setbuf(stdin, NULL);
     
-    fprintf(arch,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s",get_id(),game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+    setbuf(stdin, NULL);
+    printf("Enter the game studio: ");
+    fgets(game.studio,50,stdin);
+    fix_formatting(game.studio);
+    
+    fprintf(arch,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s \n",get_id(),game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
 
     fclose(arch);
 }
@@ -132,6 +126,7 @@ void read(){
 
             printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %f | YEAR: %d | METASCORE: %d | STUDIO: %s \n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
         }
+
     }else{
         while(1){
 
@@ -161,8 +156,8 @@ void update(){
     printf("Enter -1 to list all OR an especific ID: ");
     scanf("%d", &option);
 
-    arch = load_db("a+"); // TODO ERROR HANDELING
-    rewind(arch);
+    arch = load_db("r+"); // TODO ERROR HANDELING
+    // rewind(arch);
 
     while(1){
 
@@ -171,54 +166,59 @@ void update(){
             break;
         }
 
-        fscanf(arch,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
+        fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
  
         if(id == option){
+
+            printf("DEBUG!!!!\n");
             
+            setbuf(stdin, NULL);
             printf("Enter the name of the game: ");
-            scanf("%49s", game.name);
+            fgets(game.name,50,stdin);
+            fix_formatting(game.name);
+
             setbuf(stdin, NULL);
-
-            for(int i = 0; i < strlen(game.name); i++)
-                game.name[i] = (game.name[i] == ' ') ? '_' : game.name[i];
-
             printf("Enter the name of the platform: ");
-            scanf("%49s", game.platform);
-            setbuf(stdin, NULL);
+            fgets(game.platform,50,stdin);
+            fix_formatting(game.platform);
 
+            setbuf(stdin, NULL);
             printf("Enter the genre of the game: ");
-            scanf("%49s", game.genre);
-            setbuf(stdin, NULL);
+            fgets(game.genre,50,stdin);
+            fix_formatting(game.genre);
 
+            setbuf(stdin, NULL);
             printf("Enter the price of the game: ");
             scanf("%f", &game.price);
-            setbuf(stdin, NULL);
 
+            setbuf(stdin, NULL);
             printf("Enter the quantity of the game keys: ");
             scanf("%d", &game.keys);
-            setbuf(stdin, NULL);
 
+            setbuf(stdin, NULL);
             printf("Enter public rating of the game: ");
             scanf("%f", &game.public_rating);
-            setbuf(stdin, NULL);
 
+            setbuf(stdin, NULL);
             printf("Enter the year the game was released: ");
             scanf("%d", &game.year);
-            setbuf(stdin, NULL);
 
+            setbuf(stdin, NULL);
             printf("Enter the game metascore: ");
             scanf("%d", &game.metacritic);
-            setbuf(stdin, NULL);
 
-            printf("Enter the game studio: ");
-            fgets(game.studio, 50, stdin);
             setbuf(stdin, NULL);
-            
-            fprintf(arch,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s",id ,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+            printf("Enter the game studio: ");
+            fgets(game.studio,50,stdin);
+            fix_formatting(game.studio);
+
+            // fprintf(arch,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s \n",id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+            fputs("teste",arch);
+            break;
         }
 
-    fclose(arch);
     }
+    fclose(arch);
 }
 
 

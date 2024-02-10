@@ -7,6 +7,7 @@ int main(){
 
     do{
         setbuf(stdin,NULL);
+        
         printf("Enter one option: "); // TODO MAKE THIS NICE (TABELINHA DO GABRIEL)
         scanf("%c", &user_input);
 
