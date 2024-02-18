@@ -27,17 +27,17 @@ int create(){
 
     setbuf(stdin, NULL);
     printf("Enter the name of the game: ");
-    scanf("%49s",game.name);
+    fgets(game.name,50,stdin);
     fix_formatting(game.name);
     
     setbuf(stdin, NULL);
     printf("Enter the name of the platform: ");
-    scanf("%49s",game.platform);
+    fgets(game.platform,50,stdin);
     fix_formatting(game.platform);
     
     setbuf(stdin, NULL);
     printf("Enter the genre of the game: ");
-    scanf("%49s",game.genre);
+    fgets(game.genre,50,stdin);
     fix_formatting(game.genre);
     
     setbuf(stdin, NULL);
@@ -62,7 +62,7 @@ int create(){
     setbuf(stdin, NULL);
     
     printf("Enter the game studio: ");
-    scanf("%49s",game.studio);
+    fgets(game.studio,50,stdin);
     fix_formatting(game.studio);
 
     if(get_id() == 0)

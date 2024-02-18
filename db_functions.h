@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 FILE * load_db(char *file_name, char *option){
     FILE * arch;
@@ -13,8 +14,10 @@ FILE * load_db(char *file_name, char *option){
 void fix_formatting(char *string){
     string[strcspn(string, "\n")] = 0;
 
-    for(int i = 0; i < strlen(string); i++)
+    for(int i = 0; i < strlen(string); i++){
+        string[i] = tolower(string[i]);
         string[i] = (string[i] == ' ') ? '_' : string[i];
+    }
 }
 
 int get_id (){
