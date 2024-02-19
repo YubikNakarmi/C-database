@@ -11,6 +11,7 @@ int main(){
 
         setbuf(stdin,NULL);
         scanf("%c", &user_input);
+        getchar(); 
 
         user_input = tolower(user_input);
 
