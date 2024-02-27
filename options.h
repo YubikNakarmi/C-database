@@ -89,8 +89,17 @@ int read(){
         return 1;
     }
 
+    rewind(arch);
+
+    if(fgetc(arch) == EOF){
+        printf("The file is empty.");
+        return 1;
+    }
+
     printf("Enter -1 to list all OR an especific ID: ");
     scanf("%d", &option);
+
+    rewind(arch);
 
     if(option == -1){
 
@@ -145,6 +154,14 @@ int update(){
         printf("The file \"steamDB.txt\" does not exist!");
         return 1;
     }
+
+    if(fgetc(arch) == EOF){
+        printf("The file is empty.");
+        remove("temp____steamDB.txt");
+        return 1;
+    }
+
+    rewind(arch);
 
     printf("Enter the especific ID that you want to modify: ");
     scanf("%d", &option);
@@ -243,7 +260,15 @@ int del(){
         return 1;
     }
 
-    printf("Enter the especific ID that you want to modify: ");
+    if(fgetc(arch) == EOF){
+        printf("The file is empty.");
+        remove("temp____steamDB.txt");
+        return 1;
+    }
+
+    rewind(arch);
+
+    printf("Enter the item ID: ");
     scanf("%d", &option);
     setbuf(stdin, NULL);
     fflush(stdin);
@@ -253,22 +278,25 @@ int del(){
     int found_id = 0;
 
     while (1){
-        fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s ",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
-        
-        if(option == id){
-            game.keys = 0;
-            found_id = 1;
-        }
-            
-        if(id == 0)
-            fprintf(temp,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
-        else
-            fprintf(temp,"\n%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
-        
+
         if(feof(arch)){
             break;
         }
+
+        fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s ",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
+        
+        if(option == id){
+            found_id = 1;
+            continue;
+        }
+            
+        if(id-found_id == 0)
+            fprintf(temp,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",id-found_id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+        else
+            fprintf(temp,"\n%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",id-found_id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+        
     }
+
 
     fclose(arch);
     fclose(temp);

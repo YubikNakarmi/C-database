@@ -69,7 +69,7 @@ void display_update(int id){
 
 void display_delete(int id){
     clear_terminal();
-    printf("+----------------------------------------------------+\n");
-    printf("|Now deleting all the keys from the game with ID [%d] |\n",id);
-    printf("+----------------------------------------------------+\n");
+    printf("+-----------------------------------+\n");
+    printf("| Now deleting the item with ID [%d] |\n",id);
+    printf("+-----------------------------------+\n");
 }
