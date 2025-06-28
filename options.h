@@ -8,18 +8,15 @@
 #define PASSWORD "1234"
 
 struct steam{
-    char name[50];
-    char platform[50];
-    char genre[50];
-    float price;
-    int keys;
-    float public_rating;
-    int year;
-    int metacritic; 
-    char studio[50];
+    char medicine_name[50];
+    char category[50];
+    char unit[50];
+    int quantity;
+    char supplier[50]; 
+    char expiry_date[50];
 };
 
-typedef struct steam games;
+typedef struct steam records;
 
 int login() {
     char username[50];
@@ -42,55 +39,45 @@ int login() {
 
 int create(){
     display_creating_game();
-    games game;
+    records record; // defining structure variable
     FILE * arch;
 
     arch = load_db("recordDB.txt","a");
 
     setbuf(stdin, NULL);
-    printf("Enter the name of the game: ");
-    fgets(game.name,50,stdin);
-    fix_formatting(game.name);
+    printf("Enter the medicine name: ");
+    fgets(record.medicine_name,50,stdin);
+    fix_formatting(record.medicine_name);
     
     setbuf(stdin, NULL);
-    printf("Enter the name of the platform: ");
-    fgets(game.platform,50,stdin);
-    fix_formatting(game.platform);
+    printf("Enter the category of medicine: ");
+    fgets(record.category,50,stdin);
+    fix_formatting(record.category);
     
     setbuf(stdin, NULL);
-    printf("Enter the genre of the game: ");
-    fgets(game.genre,50,stdin);
-    fix_formatting(game.genre);
+    printf("Enter the unit : ");
+    fgets(record.unit,50,stdin);
+    fix_formatting(record.unit);
+    
     
     setbuf(stdin, NULL);
-    printf("Enter the price of the game: ");
-    scanf("%f", &game.price);
-    
+    printf("Enter the quantity in integer: ");
+    scanf("%d", &record.quantity);
+
     setbuf(stdin, NULL);
-    printf("Enter the quantity of the game keys: ");
-    scanf("%d", &game.keys);
+    printf("Enter the supplier: ");
+    fgets(record.supplier,50,stdin);
+    fix_formatting(record.supplier);
     
-    setbuf(stdin, NULL);
-    printf("Enter public rating of the game: ");
-    scanf("%f", &game.public_rating);
-    
-    setbuf(stdin, NULL);
-    printf("Enter the year the game was released: ");
-    scanf("%d", &game.year);
-    
-    setbuf(stdin, NULL);
-    printf("Enter the game metascore: ");
-    scanf("%d", &game.metacritic);
-    setbuf(stdin, NULL);
-    
-    printf("Enter the game studio: ");
-    fgets(game.studio,50,stdin);
-    fix_formatting(game.studio);
+
+    printf("Enter the record expiry_date: ");
+    fgets(record.expiry_date,50,stdin);
+    fix_formatting(record.expiry_date);
 
     if(get_id() == 0)
-        fprintf(arch,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",get_id(),game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+        fprintf(arch,"%d | %s | %s | %s | %d | %s | %s ",get_id(),record.medicine_name, record.category, record.unit, record.quantity, record.supplier, record.expiry_date);
     else
-        fprintf(arch,"\n%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",get_id(),game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+        fprintf(arch,"\n%d | %s | %s | %s | %d | %s | %s ",get_id(),record.medicine_name, record.category, record.unit, record.quantity, record.supplier, record.expiry_date);
 
     fclose(arch);
     return 0;
@@ -99,15 +86,15 @@ int create(){
 
 int read(){
     clear_terminal();
-    games game;
+    records record;
     FILE * arch;
 
     int option, id;
 
-    arch = load_db("steamDB.txt","r");
+    arch = load_db("recordDB.txt","r");
 
     if(arch == NULL){
-        printf("The file \"steamDB.txt does not exist\"");
+        printf("The file \"file does not exist\"");
         return 1;
     }
 
@@ -132,8 +119,8 @@ int read(){
             if(feof(arch))
                 break;
 
-            fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s ",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
-            printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %.2f | YEAR: %d | METASCORE: %d | STUDIO: %s \n\n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+            fscanf(arch,"%d | %49[^|] | %49[^|] | %49[^|] | %d | %49[^|] | %49[^\n]", &id, record.medicine_name, record.category, record.unit, &record.quantity, record.supplier, record.expiry_date);
+            printf("ID: %d | medicine_name: %s | category: %s | unit: %s | quantity: %d | supplier: %s | expiry_date: %s\n\n", id, record.medicine_name, record.category, record.unit, record.quantity, record.supplier, record.expiry_date);
         
         }
         
@@ -146,11 +133,11 @@ int read(){
                 break;
             }
 
-            fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s ",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
+            fscanf(arch,"%d | %49[^|] | %49[^|] | %49[^|] | %d | %49[^|] | %49[^\n]", &id, record.medicine_name, record.category, record.unit, &record.quantity, record.supplier, record.expiry_date);
 
             if(id == option){
                 display_specific_game(option);
-                printf("ID: %d | NAME: %s | PLATAFORM: %s | GENRE: %s | PRICE: $%.2f | KEYS: %d | PUBLIC RATING: %.2f | YEAR: %d | METASCORE: %d | STUDIO: %s \n\n", id, game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+                printf("ID: %d | medicine_name: %s | category: %s | unit: %s | quantity: %d | supplier: %s | expiry_date: %s\n\n", id, record.medicine_name, record.category, record.unit, record.quantity, record.supplier, record.expiry_date);
                 break;
             }
         }
@@ -163,17 +150,17 @@ int read(){
 
 int update(){
     clear_terminal();
-    games game;
+    records record;
     FILE * arch;
     FILE * temp;
     
     int option, id, a, found_id = 0;
 
-    arch = load_db("steamDB.txt","r");
+    arch = load_db("recordDb.txt","r");
     temp = load_db("temp____steamDB.txt","w");
 
     if(arch == NULL){
-        printf("The file \"steamDB.txt\" does not exist!");
+        printf("The file \"recordDb.txt\" does not exist!");
         return 1;
     }
 
@@ -193,52 +180,40 @@ int update(){
     display_update(option);
 
     while (1){
-        fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s ",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
+        fscanf(arch,"%d | %49[^|] | %49[^|] | %49[^|] | %d | %49[^|] | %49[^\n]", &id, record.medicine_name, record.category, record.unit, &record.quantity, record.supplier, record.expiry_date);
         if(option == id){
             found_id = 1;
-            printf("Enter the name of the game: ");
-            fgets(game.name,50,stdin);
-            fix_formatting(game.name);
+            printf("Enter the medicine_name of the record: ");
+            fgets(record.medicine_name,50,stdin);
+            fix_formatting(record.medicine_name);
             
             setbuf(stdin, NULL);
-            printf("Enter the name of the platform: ");
-            fgets(game.platform,50,stdin);
-            fix_formatting(game.platform);
+            printf("Enter the medicine_name of the category: ");
+            fgets(record.category,50,stdin);
+            fix_formatting(record.category);
             
             setbuf(stdin, NULL);
-            printf("Enter the genre of the game: ");
-            fgets(game.genre,50,stdin);
-            fix_formatting(game.genre);
+            printf("Enter the unit of the record: ");
+            fgets(record.unit,50,stdin);
+            fix_formatting(record.unit);
             
             setbuf(stdin, NULL);
-            printf("Enter the price of the game: ");
-            scanf("%f", &game.price);
+            printf("Enter the quantity of the record quantity: ");
+            scanf("%d", &record.quantity);
             
             setbuf(stdin, NULL);
-            printf("Enter the quantity of the game keys: ");
-            scanf("%d", &game.keys);
+            printf("Enter the supplier: ");
+            fgets(record.supplier,50,stdin);
+            fix_formatting(record.supplier);
             
-            setbuf(stdin, NULL);
-            printf("Enter public rating of the game: ");
-            scanf("%f", &game.public_rating);
-            
-            setbuf(stdin, NULL);
-            printf("Enter the year the game was released: ");
-            scanf("%d", &game.year);
-            
-            setbuf(stdin, NULL);
-            printf("Enter the game metascore: ");
-            scanf("%d", &game.metacritic);
-            setbuf(stdin, NULL);
-            
-            printf("Enter the game studio: ");
-            fgets(game.studio,50,stdin);
-            fix_formatting(game.studio);
+            printf("Enter the record expiry_date: ");
+            fgets(record.expiry_date,50,stdin);
+            fix_formatting(record.expiry_date);
         }
         if(id == 0)
-            fprintf(temp,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+            fprintf(temp,"%d | %s | %s | %s | %d | %s | %s ",id,record.medicine_name, record.category, record.unit, record.quantity, record.supplier, record.expiry_date);
         else
-            fprintf(temp,"\n%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+            fprintf(temp,"\n%d | %s | %s | %s | %d | %s | %s ",id,record.medicine_name, record.category, record.unit, record.quantity, record.supplier, record.expiry_date);
         if(feof(arch))
             break;
     }
@@ -246,7 +221,7 @@ int update(){
     fclose(arch);
     fclose(temp);
 
-    arch = load_db("steamDB.txt","w");
+    arch = load_db("recordDb.txt","w");
     temp = load_db("temp____steamDB.txt","r");
 
     while( (a = fgetc(temp)) != EOF )
@@ -268,17 +243,17 @@ int update(){
 
 int del(){
     clear_terminal();
-    games game;
+    records record;
     FILE * arch;
     FILE * temp;
     
     int option, id, a;
 
-    arch = load_db("steamDB.txt","r");
+    arch = load_db("recordDb.txt","r");
     temp = load_db("temp____steamDB.txt","w");
 
     if(arch == NULL){
-        printf("The file \"steamDB.txt\" does not exist!");
+        printf("The file \"recordDb.txt\" does not exist!");
         return 1;
     }
 
@@ -305,17 +280,17 @@ int del(){
             break;
         }
 
-        fscanf(arch,"%d | %s | %s | %s | %f | %d | %f | %d | %d | %s ",&id, game.name, game.platform, game.genre, &game.price, &game.keys, &game.public_rating, &game.year, &game.metacritic, game.studio);
-        
+        fscanf(arch,"%d | %49[^|] | %49[^|] | %49[^|] | %d | %49[^|] | %49[^\n]", &id, record.medicine_name, record.category, record.unit, &record.quantity, record.supplier, record.expiry_date);
+
         if(option == id){
             found_id = 1;
             continue;
         }
-            
+
         if(id-found_id == 0)
-            fprintf(temp,"%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",id-found_id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+            fprintf(temp,"%d | %s | %s | %s | %d | %s | %s ",id-found_id,record.medicine_name, record.category, record.unit, record.quantity, record.supplier, record.expiry_date);
         else
-            fprintf(temp,"\n%d | %s | %s | %s | %.2f | %d | %.2f | %d | %d | %s ",id-found_id,game.name, game.platform, game.genre, game.price, game.keys, game.public_rating, game.year, game.metacritic, game.studio);
+            fprintf(temp,"\n%d | %s | %s | %s | %d | %s | %s ",id-found_id,record.medicine_name, record.category, record.unit, record.quantity, record.supplier, record.expiry_date);
         
     }
 
@@ -323,7 +298,7 @@ int del(){
     fclose(arch);
     fclose(temp);
 
-    arch = load_db("steamDB.txt","w");
+    arch = load_db("recordDb.txt","w");
     temp = load_db("temp____steamDB.txt","r");
 
     while( (a = fgetc(temp)) != EOF )

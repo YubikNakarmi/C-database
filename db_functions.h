@@ -23,10 +23,10 @@ void fix_formatting(char *string){
 int get_id (){
     FILE * arch;
 
-    arch = load_db("steamDB.txt","r");
+    arch = load_db("recordDB.txt","r");
     
     if (arch == NULL)
-        arch = load_db("steamDB.txt","a");
+        arch = load_db("recordDB.txt","a");
 
     int c = fgetc(arch);
     
