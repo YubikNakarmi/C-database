@@ -183,12 +183,12 @@ int update(){
         fscanf(arch,"%d | %49[^|] | %49[^|] | %49[^|] | %d | %49[^|] | %49[^\n]", &id, record.medicine_name, record.category, record.unit, &record.quantity, record.supplier, record.expiry_date);
         if(option == id){
             found_id = 1;
-            printf("Enter the medicine_name of the record: ");
+            printf("Enter the medicine name: ");
             fgets(record.medicine_name,50,stdin);
             fix_formatting(record.medicine_name);
             
             setbuf(stdin, NULL);
-            printf("Enter the medicine_name of the category: ");
+            printf("Enter the category of medicine: ");
             fgets(record.category,50,stdin);
             fix_formatting(record.category);
             
