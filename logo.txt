@@ -12,6 +12,6 @@
 |          [c]reate [r]ead [u]pdate [d]elete [l]eave          |
 |                                                             |
 |                                                             |
-| Authors: Gabriel Witor & Rafael Tomaz. All rights reserved. |
+|  |
 +-------------------------------------------------------------+
                        Enter one option:
