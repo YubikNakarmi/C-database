@@ -193,7 +193,7 @@ int update(){
             fix_formatting(record.category);
             
             setbuf(stdin, NULL);
-            printf("Enter the unit of the record: ");
+            printf("Enter the unit of medicine: ");
             fgets(record.unit,50,stdin);
             fix_formatting(record.unit);
             
