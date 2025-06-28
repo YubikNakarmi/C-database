@@ -198,7 +198,7 @@ int update(){
             fix_formatting(record.unit);
             
             setbuf(stdin, NULL);
-            printf("Enter the quantity of the record quantity: ");
+            printf("Enter the quantity: ");
             scanf("%d", &record.quantity);
             
             setbuf(stdin, NULL);
