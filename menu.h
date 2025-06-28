@@ -41,9 +41,9 @@ void display_menu(){
 
 void display_creating_game(){
     clear_terminal();
-    printf("+---------------+\n");
-    printf("| Creating game |\n");
-    printf("+---------------+\n\n");
+    printf("+------------------------------+\n");
+    printf("| Creating a Patient Record |\n");
+    printf("+------------------------------+\n\n");
 }
 
 void display_listing_all_games(){

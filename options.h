@@ -23,7 +23,7 @@ int create(){
     games game;
     FILE * arch;
 
-    arch = load_db("steamDB.txt","a");
+    arch = load_db("recordDB.txt","a");
 
     setbuf(stdin, NULL);
     printf("Enter the name of the game: ");
