@@ -4,6 +4,11 @@
 #include "options.h"
 
 int main(){
+    if (!login()) {
+        printf("Exiting program.\n");
+        return 0;
+    }
+
     char user_input;
 
     do{
@@ -11,7 +16,7 @@ int main(){
 
         setbuf(stdin,NULL);
         scanf("%c", &user_input);
-        getchar(); 
+        getchar(); //reads next
 
         user_input = tolower(user_input);
 

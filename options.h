@@ -4,6 +4,9 @@
 #include "db_functions.h"
 #include "menu.h"
 
+#define USERNAME "admin"
+#define PASSWORD "1234"
+
 struct steam{
     char name[50];
     char platform[50];
@@ -17,6 +20,25 @@ struct steam{
 };
 
 typedef struct steam games;
+
+int login() {
+    char username[50];
+    char password[50];
+
+    printf("=== LOGIN ===\n");
+    printf("Username: ");
+    scanf("%49s", username);
+    printf("Password: ");
+    scanf("%49s", password);
+
+    if (strcmp(username, USERNAME) == 0 && strcmp(password, PASSWORD) == 0) {
+        printf("Login successful!\n");
+        return 1;
+    } else {
+        printf("Invalid credentials.\n");
+        return 0;
+    }
+}
 
 int create(){
     display_creating_game();
