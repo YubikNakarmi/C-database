@@ -3,6 +3,8 @@
 #include <string.h>
 #include "db_functions.h"
 #include "menu.h"
+#include "admin.h"
+
 
 #define USERNAME "admin"
 #define PASSWORD "1234"
@@ -35,6 +37,59 @@ int login() {
         printf("Invalid credentials.\n");
         return 0;
     }
+}
+
+int admin(){
+    
+     char user_input;
+
+    do{
+        display_admin();
+
+        setbuf(stdin,NULL);
+        scanf("%c", &user_input);
+        getchar(); //reads next
+
+        user_input = tolower(user_input);
+
+        switch (user_input)
+        {
+        case '1':
+            add_user();
+            break;        
+            
+        case '2':
+            view_user();
+            break;
+        
+        case '3':
+            edit_user();
+            break;
+        
+        case '4':
+           delete_user();
+            break;
+            
+        case '6':
+            return 0;
+            break;
+
+        case '5':
+            view_logs();
+            break;
+        
+        default:
+            break;
+        }
+
+        printf("\n\n\t\tPress Enter to Continue");
+        setbuf(stdin,NULL);
+        while( getchar() != '\n' );
+
+    } while (user_input != 'l');
+    
+    return 0;
+
 }
 
 int create(){
@@ -157,7 +212,7 @@ int update(){
     int option, id, a, found_id = 0;
 
     arch = load_db("recordDb.txt","r");
-    temp = load_db("temp____steamDB.txt","w");
+    temp = load_db("temp____recordDB.txt","w");
 
     if(arch == NULL){
         printf("The file \"recordDb.txt\" does not exist!");
@@ -166,7 +221,7 @@ int update(){
 
     if(fgetc(arch) == EOF){
         printf("The file is empty.");
-        remove("temp____steamDB.txt");
+        remove("temp____recordDB.txt");
         return 1;
     }
 
@@ -206,7 +261,7 @@ int update(){
             fgets(record.supplier,50,stdin);
             fix_formatting(record.supplier);
             
-            printf("Enter the record expiry_date: ");
+            printf("Enter the  expiry_date: ");
             fgets(record.expiry_date,50,stdin);
             fix_formatting(record.expiry_date);
         }
@@ -222,7 +277,7 @@ int update(){
     fclose(temp);
 
     arch = load_db("recordDb.txt","w");
-    temp = load_db("temp____steamDB.txt","r");
+    temp = load_db("temp____recordDB.txt","r");
 
     while( (a = fgetc(temp)) != EOF )
         fputc(a, arch);
@@ -236,7 +291,7 @@ int update(){
     else
         printf("\nThe system couldn't find the ID you provided.");
 
-    remove("temp____steamDB.txt");
+    remove("temp____record.txt");
 
     return 0;
 }
@@ -250,7 +305,7 @@ int del(){
     int option, id, a;
 
     arch = load_db("recordDb.txt","r");
-    temp = load_db("temp____steamDB.txt","w");
+    temp = load_db("temp____recordDB.txt","w");
 
     if(arch == NULL){
         printf("The file \"recordDb.txt\" does not exist!");
@@ -259,7 +314,7 @@ int del(){
 
     if(fgetc(arch) == EOF){
         printf("The file is empty.");
-        remove("temp____steamDB.txt");
+        remove("temp____recordDB.txt");
         return 1;
     }
 
@@ -299,7 +354,7 @@ int del(){
     fclose(temp);
 
     arch = load_db("recordDb.txt","w");
-    temp = load_db("temp____steamDB.txt","r");
+    temp = load_db("temp____recordDB.txt","r");
 
     while( (a = fgetc(temp)) != EOF )
         fputc(a, arch);
@@ -313,7 +368,7 @@ int del(){
     else
         printf("\nThe system couldn't find the ID you provided.");
     
-    remove("temp____steamDB.txt");
+    remove("temp____recordDB.txt");
     
     return 0;
 }

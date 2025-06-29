@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "options.h"
+#include "menu.h"
 
 int main(){
     if (!login()) {
@@ -40,6 +41,10 @@ int main(){
             
         case 'l':
             return 0;
+            break;
+
+        case 'a':
+            admin();
             break;
         
         default:

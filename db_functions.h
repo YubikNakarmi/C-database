@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#ifndef DB_FUNCTIONS_H
+#define DB_FUNCTIONS_H
 
 FILE * load_db(char *file_name, char *option){
     FILE * arch;
@@ -52,3 +54,4 @@ int get_id (){
 
     return last_id + 1;
 }
+#endif
