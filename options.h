@@ -6,9 +6,11 @@
 #include "admin.h"
 
 
+
 #define USERNAME "admin"
 #define PASSWORD "1234"
 
+ // Global variable to store the current user
 struct steam{
     char medicine_name[50];
     char category[50];
@@ -20,15 +22,9 @@ struct steam{
 
 typedef struct steam records;
 
-int login() {
-    char username[50];
-    char password[50];
-
-    printf("=== LOGIN ===\n");
-    printf("Username: ");
-    scanf("%49s", username);
-    printf("Password: ");
-    scanf("%49s", password);
+int login(char username[], char password[]) {
+   
+   
 
     if (strcmp(username, USERNAME) == 0 && strcmp(password, PASSWORD) == 0) {
         printf("Login successful!\n");
@@ -100,28 +96,23 @@ int create(){
     arch = load_db("recordDB.txt","a");
 
     setbuf(stdin, NULL);
-    printf("Enter the medicine name: ");
-    fgets(record.medicine_name,50,stdin);
+    get_nonblank_input("Enter the medicine name: ", record.medicine_name, 50);
     fix_formatting(record.medicine_name);
     
     setbuf(stdin, NULL);
-    printf("Enter the category of medicine: ");
-    fgets(record.category,50,stdin);
+    get_nonblank_input("Enter the category of medicine: ", record.category, 50);
     fix_formatting(record.category);
     
     setbuf(stdin, NULL);
-    printf("Enter the unit : ");
-    fgets(record.unit,50,stdin);
+    get_nonblank_input("Enter the unit : ", record.unit, 50);
     fix_formatting(record.unit);
     
     
     setbuf(stdin, NULL);
-    printf("Enter the quantity in integer: ");
-    scanf("%d", &record.quantity);
+    record.quantity = get_valid_int("Enter the quantity in integer: ");
 
     setbuf(stdin, NULL);
-    printf("Enter the supplier: ");
-    fgets(record.supplier,50,stdin);
+    get_nonblank_input("Enter the supplier: ", record.supplier, 50);
     fix_formatting(record.supplier);
     
 
@@ -239,26 +230,25 @@ int update(){
         if(option == id){
             found_id = 1;
             printf("Enter the medicine name: ");
-            fgets(record.medicine_name,50,stdin);
+            get_nonblank_input("Enter the medicine name: ", record.medicine_name, 50);
             fix_formatting(record.medicine_name);
             
             setbuf(stdin, NULL);
             printf("Enter the category of medicine: ");
-            fgets(record.category,50,stdin);
+            get_nonblank_input("Enter the category of medicine: ", record.category, 50);
             fix_formatting(record.category);
             
             setbuf(stdin, NULL);
             printf("Enter the unit of medicine: ");
-            fgets(record.unit,50,stdin);
+            get_nonblank_input("Enter the unit of medicine: ", record.unit, 50);
             fix_formatting(record.unit);
             
-            setbuf(stdin, NULL);
-            printf("Enter the quantity: ");
-            scanf("%d", &record.quantity);
+             setbuf(stdin, NULL);
+             record.quantity = get_valid_int("Enter the quantity in integer: ");
             
             setbuf(stdin, NULL);
             printf("Enter the supplier: ");
-            fgets(record.supplier,50,stdin);
+            get_nonblank_input("Enter the supplier: ", record.supplier, 50);
             fix_formatting(record.supplier);
             
             printf("Enter the  expiry_date: ");
@@ -276,7 +266,7 @@ int update(){
     fclose(arch);
     fclose(temp);
 
-    arch = load_db("recordDb.txt","w");
+    arch = load_db("recordDB.txt","w");
     temp = load_db("temp____recordDB.txt","r");
 
     while( (a = fgetc(temp)) != EOF )
@@ -304,11 +294,11 @@ int del(){
     
     int option, id, a;
 
-    arch = load_db("recordDb.txt","r");
+    arch = load_db("recordDB.txt","r");
     temp = load_db("temp____recordDB.txt","w");
 
     if(arch == NULL){
-        printf("The file \"recordDb.txt\" does not exist!");
+        printf("The file \"recordDB.txt\" does not exist!");
         return 1;
     }
 
@@ -353,7 +343,7 @@ int del(){
     fclose(arch);
     fclose(temp);
 
-    arch = load_db("recordDb.txt","w");
+    arch = load_db("recordDB.txt","w");
     temp = load_db("temp____recordDB.txt","r");
 
     while( (a = fgetc(temp)) != EOF )

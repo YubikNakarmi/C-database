@@ -1,0 +1,11 @@
++-------------------------------------------------------------+
+|                                                             |
+|             ADMIN DATABASE MANAGEMENT PANEL                 |
+|                                                             |
+|                      Enter one option:                      |
+|                                                             |
+|     [1] Add User      [2] View Users       [3] Edit user  |
+|     [4] Delete user [5] View Logs        [6] Back         |
+|                                                             |
++-------------------------------------------------------------+
+                       

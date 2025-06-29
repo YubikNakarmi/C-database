@@ -11,6 +11,7 @@ void clear_terminal(){
         system("clear");
     #endif
 }
+
 int display_admin(){ //admin panel display
     clear_terminal();
     FILE * arch; 

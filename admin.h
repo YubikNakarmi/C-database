@@ -36,9 +36,40 @@ int edit_user(){
 }
 
 int view_logs(){
-    // Function to view logs
-    printf("Viewing logs...\n");
-    // Implementation goes here
-    return 0;
-}
+    char date[16]; // Allow for "all" or YYYY-MM-DD
+    char line[512];
+    FILE *logfile;
+
+    printf("Enter date to filter logs (YYYY-MM-DD) or type 'all' to show all logs: ");
+    if (fgets(date, sizeof(date), stdin)) {
+        date[strcspn(date, "\n")] = 0; // Remove newline
+    }
+
+    logfile = fopen("log.txt", "r");
+    if (!logfile) {
+        printf("Could not open log.txt\n");
+        return 1;
+    }
+
+    int found = 0;
+    if (strcmp(date, "all") == 0 || strlen(date) == 0) {
+        printf("Showing all logs:\n");
+        while (fgets(line, sizeof(line), logfile)) {
+            printf("%s", line);
+            found = 1;
+        }
+    } else {
+        printf("Logs for %s:\n", date);
+        while (fgets(line, sizeof(line), logfile)) {
+            if (strncmp(line + 1, date, 10) == 0) { // +1 to skip the initial '['
+                printf("%s", line);
+                found = 1;
+            }
+        }
+    }
+    if (!found) {
+        printf("No logs found for this selection.\n");
+    }
+    fclose(logfile);
+    return 0;}
 #endif

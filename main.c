@@ -3,9 +3,18 @@
 #include <ctype.h>
 #include "options.h"
 #include "menu.h"
+#include "db_functions.h"
 
 int main(){
-    if (!login()) {
+    char username[50];
+    char password[50];
+
+    printf("=== LOGIN ===\n");
+    printf("Username: ");
+    scanf("%49s", username);
+    printf("Password: ");
+    scanf("%49s", password);
+    if (!login(username, password)) {
         printf("Exiting program.\n");
         return 0;
     }
@@ -25,26 +34,32 @@ int main(){
         {
         case 'c':
             create();
+            log_message(username, "Create operation performed");
             break;        
             
         case 'r':
             read();
+            log_message(username, "Read operation performed");
             break;
         
         case 'u':
             update();
+            log_message(username, "Update operation performed");
             break;
         
         case 'd':
             del();
+            log_message(username, "Delete operation performed");
             break;
             
         case 'l':
+            log_message(username, "Logout");
             return 0;
             break;
 
         case 'a':
             admin();
+            log_message(username, "Admin operation performed");
             break;
         
         default:
