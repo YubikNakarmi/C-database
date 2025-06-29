@@ -10,6 +10,6 @@
 |                      Enter one option:                      |
 |                                                             |
 |          [c]reate   [r]ead   [u]pdate   [d]elete            |
-|                          [l]eave                            |
+|                          [l]eave   [a]dmin                  |
 |                                                             |
 +-------------------------------------------------------------+

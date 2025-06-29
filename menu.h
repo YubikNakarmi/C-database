@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#ifndef MENU_H
+#define MENU_H
 
 void clear_terminal(){
     #ifdef _WIN32
@@ -10,7 +12,27 @@ void clear_terminal(){
     #endif
 }
 
-void display_menu(){
+int display_admin(){ //admin panel display
+    clear_terminal();
+    FILE * arch; 
+    arch = fopen("admin.txt","r");
+    char menu_line[255];
+    while(1){
+
+        if (feof(arch)){
+            break;
+        }
+
+        fgets(menu_line,255,arch);
+
+        printf("%s",menu_line);
+    }
+    fclose(arch);
+    
+
+}
+void display_menu(){// display the main menu
+    // This function displays the main menu of the application.
     clear_terminal();
 
     FILE * arch;
@@ -21,7 +43,7 @@ void display_menu(){
     time( &rawtime );
     timeinfo = localtime( &rawtime );
 
-    printf("+-------------------------------------------------------------+\n");
+    printf("+-------------------------------------------------------------------+\n");
     printf("|                       %02d:%02d %02d/%02d/%d                      |\n", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_mday, timeinfo->tm_mon+1, timeinfo->tm_year+1900);
 
     char menu_line[255];
@@ -41,35 +63,36 @@ void display_menu(){
 
 void display_creating_game(){
     clear_terminal();
-    printf("+------------------------------+\n");
+    printf("+----------------------------+\n");
     printf("| Creating a medicine Record |\n");
     printf("+------------------------------+\n\n");
 }
 
 void display_listing_all_games(){
     clear_terminal();
-    printf("+-------------------+\n");
+    printf("+-----------------------------+\n");
     printf("| Showing the medicine Record |\n");
-    printf("+-------------------+\n\n");
+    printf("+-----------------------------+\n\n");
 }
 
 void display_specific_game(int id){
     clear_terminal();
-    printf("+---------------------------------+\n");
+    printf("+--------------------------------------+\n");
     printf("| Now displaying medicine with ID [%d] |\n",id);
-    printf("+---------------------------------+\n\n");
+    printf("+--------------------------------------+\n\n");
 }
 
 void display_update(int id){
     clear_terminal();
-    printf("+-----------------------------------+\n");
+    printf("+----------------------------------------+\n");
     printf("| Now updating the medicine with ID [%d] |\n",id);
-    printf("+-----------------------------------+\n\n");
+    printf("+----------------------------------------+\n\n");
 }
 
 void display_delete(int id){
     clear_terminal();
-    printf("+-----------------------------------+\n");
+    printf("+------------------------------------+\n");
     printf("| Now deleting medicine with ID [%d] |\n",id);
-    printf("+-----------------------------------+\n");
+    printf("+------------------------------------+\n");
 }
+#endif

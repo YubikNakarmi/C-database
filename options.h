@@ -3,10 +3,14 @@
 #include <string.h>
 #include "db_functions.h"
 #include "menu.h"
+#include "admin.h"
+
+
 
 #define USERNAME "admin"
 #define PASSWORD "1234"
 
+ // Global variable to store the current user
 struct steam{
     char medicine_name[50];
     char category[50];
@@ -18,15 +22,9 @@ struct steam{
 
 typedef struct steam records;
 
-int login() {
-    char username[50];
-    char password[50];
-
-    printf("=== LOGIN ===\n");
-    printf("Username: ");
-    scanf("%49s", username);
-    printf("Password: ");
-    scanf("%49s", password);
+int login(char username[], char password[]) {
+   
+   
 
     if (strcmp(username, USERNAME) == 0 && strcmp(password, PASSWORD) == 0) {
         printf("Login successful!\n");
@@ -37,6 +35,59 @@ int login() {
     }
 }
 
+int admin(){
+    
+     char user_input;
+
+    do{
+        display_admin();
+
+        setbuf(stdin,NULL);
+        scanf("%c", &user_input);
+        getchar(); //reads next
+
+        user_input = tolower(user_input);
+
+        switch (user_input)
+        {
+        case '1':
+            add_user();
+            break;        
+            
+        case '2':
+            view_user();
+            break;
+        
+        case '3':
+            edit_user();
+            break;
+        
+        case '4':
+           delete_user();
+            break;
+            
+        case '6':
+            return 0;
+            break;
+
+        case '5':
+            view_logs();
+            break;
+        
+        default:
+            break;
+        }
+
+        printf("\n\n\t\tPress Enter to Continue");
+        setbuf(stdin,NULL);
+        while( getchar() != '\n' );
+
+    } while (user_input != 'l');
+    
+    return 0;
+
+}
+
 int create(){
     display_creating_game();
     records record; // defining structure variable
@@ -45,28 +96,23 @@ int create(){
     arch = load_db("recordDB.txt","a");
 
     setbuf(stdin, NULL);
-    printf("Enter the medicine name: ");
-    fgets(record.medicine_name,50,stdin);
+    get_nonblank_input("Enter the medicine name: ", record.medicine_name, 50);
     fix_formatting(record.medicine_name);
     
     setbuf(stdin, NULL);
-    printf("Enter the category of medicine: ");
-    fgets(record.category,50,stdin);
+    get_nonblank_input("Enter the category of medicine: ", record.category, 50);
     fix_formatting(record.category);
     
     setbuf(stdin, NULL);
-    printf("Enter the unit : ");
-    fgets(record.unit,50,stdin);
+    get_nonblank_input("Enter the unit : ", record.unit, 50);
     fix_formatting(record.unit);
     
     
     setbuf(stdin, NULL);
-    printf("Enter the quantity in integer: ");
-    scanf("%d", &record.quantity);
+    record.quantity = get_valid_int("Enter the quantity in integer: ");
 
     setbuf(stdin, NULL);
-    printf("Enter the supplier: ");
-    fgets(record.supplier,50,stdin);
+    get_nonblank_input("Enter the supplier: ", record.supplier, 50);
     fix_formatting(record.supplier);
     
 
@@ -157,7 +203,7 @@ int update(){
     int option, id, a, found_id = 0;
 
     arch = load_db("recordDb.txt","r");
-    temp = load_db("temp____steamDB.txt","w");
+    temp = load_db("temp____recordDB.txt","w");
 
     if(arch == NULL){
         printf("The file \"recordDb.txt\" does not exist!");
@@ -166,7 +212,7 @@ int update(){
 
     if(fgetc(arch) == EOF){
         printf("The file is empty.");
-        remove("temp____steamDB.txt");
+        remove("temp____recordDB.txt");
         return 1;
     }
 
@@ -184,29 +230,28 @@ int update(){
         if(option == id){
             found_id = 1;
             printf("Enter the medicine name: ");
-            fgets(record.medicine_name,50,stdin);
+            get_nonblank_input("Enter the medicine name: ", record.medicine_name, 50);
             fix_formatting(record.medicine_name);
             
             setbuf(stdin, NULL);
             printf("Enter the category of medicine: ");
-            fgets(record.category,50,stdin);
+            get_nonblank_input("Enter the category of medicine: ", record.category, 50);
             fix_formatting(record.category);
             
             setbuf(stdin, NULL);
             printf("Enter the unit of medicine: ");
-            fgets(record.unit,50,stdin);
+            get_nonblank_input("Enter the unit of medicine: ", record.unit, 50);
             fix_formatting(record.unit);
             
-            setbuf(stdin, NULL);
-            printf("Enter the quantity: ");
-            scanf("%d", &record.quantity);
+             setbuf(stdin, NULL);
+             record.quantity = get_valid_int("Enter the quantity in integer: ");
             
             setbuf(stdin, NULL);
             printf("Enter the supplier: ");
-            fgets(record.supplier,50,stdin);
+            get_nonblank_input("Enter the supplier: ", record.supplier, 50);
             fix_formatting(record.supplier);
             
-            printf("Enter the record expiry_date: ");
+            printf("Enter the  expiry_date: ");
             fgets(record.expiry_date,50,stdin);
             fix_formatting(record.expiry_date);
         }
@@ -221,8 +266,8 @@ int update(){
     fclose(arch);
     fclose(temp);
 
-    arch = load_db("recordDb.txt","w");
-    temp = load_db("temp____steamDB.txt","r");
+    arch = load_db("recordDB.txt","w");
+    temp = load_db("temp____recordDB.txt","r");
 
     while( (a = fgetc(temp)) != EOF )
         fputc(a, arch);
@@ -236,7 +281,7 @@ int update(){
     else
         printf("\nThe system couldn't find the ID you provided.");
 
-    remove("temp____steamDB.txt");
+    remove("temp____record.txt");
 
     return 0;
 }
@@ -249,17 +294,17 @@ int del(){
     
     int option, id, a;
 
-    arch = load_db("recordDb.txt","r");
-    temp = load_db("temp____steamDB.txt","w");
+    arch = load_db("recordDB.txt","r");
+    temp = load_db("temp____recordDB.txt","w");
 
     if(arch == NULL){
-        printf("The file \"recordDb.txt\" does not exist!");
+        printf("The file \"recordDB.txt\" does not exist!");
         return 1;
     }
 
     if(fgetc(arch) == EOF){
         printf("The file is empty.");
-        remove("temp____steamDB.txt");
+        remove("temp____recordDB.txt");
         return 1;
     }
 
@@ -298,8 +343,8 @@ int del(){
     fclose(arch);
     fclose(temp);
 
-    arch = load_db("recordDb.txt","w");
-    temp = load_db("temp____steamDB.txt","r");
+    arch = load_db("recordDB.txt","w");
+    temp = load_db("temp____recordDB.txt","r");
 
     while( (a = fgetc(temp)) != EOF )
         fputc(a, arch);
@@ -313,7 +358,7 @@ int del(){
     else
         printf("\nThe system couldn't find the ID you provided.");
     
-    remove("temp____steamDB.txt");
+    remove("temp____recordDB.txt");
     
     return 0;
 }
