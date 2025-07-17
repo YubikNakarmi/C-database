@@ -70,10 +70,10 @@ Every operation is **timestamped** and attributed to the specific user (e.g., `(
 [2025-06-29 19:57:22] | (admin) | Logout 
 ```
 ### Main Menu  
-![Main Menu](YubikNakarmi/C-database/assets/admin.jpeg)
+![Main Menu](https://github.com/YubikNakarmi/C-database/blob/main/assets/user.png)
 
 ### Admin Panel  
-![Admin Panel](YubikNakarmi/C-database/assets/user.png)
+![Admin Panel](https://github.com/YubikNakarmi/C-database/blob/main/assets/admin.jpeg)
 
 
 
