@@ -44,7 +44,7 @@ Execute the `main` file.
 ```
 
 ## Features
-### ✅ General User Mode
+### General User Mode
 - **Create**: Add new medicine entries to the database.
 - **Read**: View details of available medicines.
 - **Update**: Edit existing medicine records.
@@ -52,7 +52,7 @@ Execute the `main` file.
 - **Leave**: Exit the program.
 - **Admin Login**: Securely access the admin dashboard.
 
-### 🔐 Admin Mode
+### Admin Mode
 - **Add User**: Register new system users.
 - **View Users**: Display all registered users.
 - **Edit User**: Update user information.
@@ -60,9 +60,21 @@ Execute the `main` file.
 - **View Logs**: Audit actions performed on the system.
 - **Back**: Return to main menu.
 
+### Operation Logs
 
+Every operation is **timestamped** and attributed to the specific user (e.g., `(admin)`) with real-time tracking. Example:
 
-You should be prompted with the following screen:
+```text
+[2025-06-29 19:30:05] | (admin) | Create operation performed
+[2025-06-29 19:42:48] | (admin) | Update operation performed
+[2025-06-29 19:57:22] | (admin) | Logout 
+```
+### Main Menu  
+![Main Menu](YubikNakarmi/C-database/assets/admin.jpeg)
+
+### Admin Panel  
+![Admin Panel](YubikNakarmi/C-database/assets/user.png)
+
 
 
 
