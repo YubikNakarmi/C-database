@@ -3,14 +3,16 @@
 
 This is a simple CRUD system written in C. It has basic capabilities like creating a database and adding, updating and removing elements from the database. All data is stored in a .txt file.
 
-This CRUD system has a "game store theme" and was made as final project for our C programming classes at [UENP](https://uenp.edu.br/).
-
+This CRUD system stores medicinal details, and has to levels of access 
++ Admin
++ User
 
 
 
 ## Acknowledgements
 
  - This CRUD system was tested both in Linux and Windows, so it should run properly in both operating systems.
+ - Original project by [gabrielwitor](https://github.com/gabrielwitor/CRUD-C)
  - This project is under the [MIT license](https://opensource.org/license/mit/).
 
 
@@ -43,11 +45,7 @@ Execute the `main` file.
 
 You should be prompted with the following screen:
 
-![](screen_example.png)
 
 
-## Authors
 
-- [@gabrielwitor](https://www.github.com/gabrielwitor)
-- [@RafaelTomazGraciano](https://github.com/RafaelTomazGraciano)
 
