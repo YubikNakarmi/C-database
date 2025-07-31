@@ -7,8 +7,7 @@
 
 
 
-#define USERNAME "admin"
-#define PASSWORD "1234"
+
 
  // Global variable to store the current user
 struct steam{
@@ -22,17 +21,35 @@ struct steam{
 
 typedef struct steam records;
 
-int login(char username[], char password[]) {
-   
-   
+int login(char username[], char password[], char userlevel[]) {
+    FILE *user_admin = fopen("admin_users.txt", "r");
+    if (!user_admin) {
+        printf("Could not open admin_users.txt for reading.\n");
+        return 0;
+    }
 
-    if (strcmp(username, USERNAME) == 0 && strcmp(password, PASSWORD) == 0) {
-        printf("Login successful!\n");
-        return 1;
-    } else {
+    char line[256];
+    char file_username[50], file_password[50], file_access[20];
+    int found = 0;
+
+    while (fgets(line, sizeof(line), user_admin)) {
+        // Parse line: username,password,access_level
+        if (sscanf(line, "%49[^,],%49[^,],%19[^\n]", file_username, file_password, file_access) == 3) {
+            if (strcmp(username, file_username) == 0 && strcmp(password, file_password) == 0) {
+                found = 1;
+                strcpy(userlevel, file_access); // Save access level
+                printf("Login successful! Access level: %s\n", file_access);
+                break;
+            }
+        }
+    }
+    fclose(user_admin);
+
+    if (!found) {
         printf("Invalid credentials.\n");
         return 0;
     }
+    return 1;
 }
 
 int admin(){
@@ -140,57 +157,69 @@ int read(){
     arch = load_db("recordDB.txt","r");
 
     if(arch == NULL){
-        printf("The file \"file does not exist\"");
+        printf("The file \"recordDB.txt\" does not exist!\n");
         return 1;
     }
 
+    int ch = fgetc(arch);
+    if(ch == EOF){
+        printf("The file is empty.\n");
+        fclose(arch);
+        return 1;
+    }
     rewind(arch);
 
-    if(fgetc(arch) == EOF){
-        printf("The file is empty.");
-        return 1;
-    }
-
-    printf("Enter -1 to list all OR an especific ID: ");
+    printf("Enter -1 to list all OR a specific ID: ");
     scanf("%d", &option);
 
     rewind(arch);
 
+    int any_output = 0;
+
     if(option == -1){
+        // Print ASCII table header
+        printf("+----+----------------------+-----------------+----------+----------+-----------------+--------------+\n");
+        printf("| ID |   Medicine Name      |   Category      |  Unit    | Quantity |    Supplier     | Expiry Date  |\n");
+        printf("+----+----------------------+-----------------+----------+----------+-----------------+--------------+\n");
 
-        display_listing_all_games();
-
-        while(1){
-
-            if(feof(arch))
-                break;
-
-            fscanf(arch,"%d | %49[^|] | %49[^|] | %49[^|] | %d | %49[^|] | %49[^\n]", &id, record.medicine_name, record.category, record.unit, &record.quantity, record.supplier, record.expiry_date);
-            printf("ID: %d | medicine_name: %s | category: %s | unit: %s | quantity: %d | supplier: %s | expiry_date: %s\n\n", id, record.medicine_name, record.category, record.unit, record.quantity, record.supplier, record.expiry_date);
-        
+        while (fscanf(arch,"%d | %49[^|] | %49[^|] | %49[^|] | %d | %49[^|] | %49[^\n]",
+                      &id, record.medicine_name, record.category, record.unit, &record.quantity, record.supplier, record.expiry_date) == 7) {
+            printf("| %-2d | %-20s | %-15s | %-8s | %-8d | %-15s | %-12s |\n",
+                id, record.medicine_name, record.category, record.unit, record.quantity, record.supplier, record.expiry_date);
+            any_output = 1;
         }
-        
+
+        printf("+----+----------------------+-----------------+----------+----------+-----------------+--------------+\n");
+        if (!any_output) {
+            printf("No records found.\n");
+        }
     }
     else{
-        while(1){
-
-            if(feof(arch)){
-                printf("The system couldn't find the ID you provided.\n");
-                break;
-            }
-
-            fscanf(arch,"%d | %49[^|] | %49[^|] | %49[^|] | %d | %49[^|] | %49[^\n]", &id, record.medicine_name, record.category, record.unit, &record.quantity, record.supplier, record.expiry_date);
-
+        int found = 0;
+        while (fscanf(arch,"%d | %49[^|] | %49[^|] | %49[^|] | %d | %49[^|] | %49[^\n]",
+                      &id, record.medicine_name, record.category, record.unit, &record.quantity, record.supplier, record.expiry_date) == 7) {
             if(id == option){
-                display_specific_game(option);
-                printf("ID: %d | medicine_name: %s | category: %s | unit: %s | quantity: %d | supplier: %s | expiry_date: %s\n\n", id, record.medicine_name, record.category, record.unit, record.quantity, record.supplier, record.expiry_date);
+                // Print ASCII table header
+                printf("+----+----------------------+-----------------+----------+----------+-----------------+--------------+\n");
+                printf("| ID |   Medicine Name      |   Category      |  Unit    | Quantity |    Supplier     | Expiry Date  |\n");
+                printf("+----+----------------------+-----------------+----------+----------+-----------------+--------------+\n");
+                printf("| %-2d | %-20s | %-15s | %-8s | %-8d | %-15s | %-12s |\n",
+                    id, record.medicine_name, record.category, record.unit, record.quantity, record.supplier, record.expiry_date);
+                printf("+----+----------------------+-----------------+----------+----------+-----------------+--------------+\n");
+                found = 1;
                 break;
             }
         }
-        
+        if (!found) {
+            printf("The system couldn't find the ID you provided.\n");
+        }
     }
     fclose(arch);
-    
+
+    printf("\nPress Enter to continue...");
+    setbuf(stdin, NULL);
+    while(getchar() != '\n');
+
     return 0;
 }
 

@@ -8,13 +8,14 @@
 int main(){
     char username[50];
     char password[50];
+    char userlevel[20] = "";
 
     printf("=== LOGIN ===\n");
     printf("Username: ");
     scanf("%49s", username);
     printf("Password: ");
     scanf("%49s", password);
-    if (!login(username, password)) {
+    if (!login(username, password, userlevel)) { // Pass userlevel to login
         printf("Exiting program.\n");
         return 0;
     }
@@ -24,9 +25,7 @@ int main(){
     do{
         display_menu();
 
-        setbuf(stdin,NULL);
-        scanf("%c", &user_input);
-        getchar(); //reads next
+        scanf(" %c", &user_input); // Note the space before %c
 
         user_input = tolower(user_input);
 
@@ -58,8 +57,13 @@ int main(){
             break;
 
         case 'a':
-            admin();
-            log_message(username, "Admin operation performed");
+            if(strcmp(userlevel, "admin") != 0) {
+                printf("You do not have permission to access admin functions.\n");
+                break;
+            } else {  
+                admin();
+                log_message(username, "Admin operation performed");
+            }
             break;
         
         default:
@@ -67,8 +71,7 @@ int main(){
         }
 
         printf("\n\n\t\tPress Enter to Continue");
-        setbuf(stdin,NULL);
-        while( getchar() != '\n' );
+        while(getchar() != '\n');
 
     } while (user_input != 'l');
     
